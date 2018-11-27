@@ -20,6 +20,10 @@ export default class App extends React.Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
+  reset() {
+    this.setState({faceDetected: false})
+  }
+
   render() {
     const { hasCameraPermission, faceDetected } = this.state;
     if (hasCameraPermission === null) {
@@ -42,8 +46,7 @@ export default class App extends React.Component {
             style={{ flex: 1 }}
           >
             {
-              faceDetected ? <Quiz /> : <FaceCam faceDetected={this.faceDetected.bind(this)} />
-
+              faceDetected ? <Quiz reset={this.reset.bind(this)}/> : <FaceCam faceDetected={this.faceDetected.bind(this)} />
             }
           </ImageBackground>
         </View>

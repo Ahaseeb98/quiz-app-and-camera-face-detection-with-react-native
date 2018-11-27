@@ -33,7 +33,7 @@ export default class FaceCam extends React.Component {
       <View style={styles.content}>
         {
           start ? <Camera style={{ flex: 1 }} type={this.state.type}
-            // onFacesDetected={() => this.x()}
+            onFacesDetected={() => this.x()}
             faceDetectorSettings={{
             mode: FaceDetector.Constants.Mode.accurate
             }}

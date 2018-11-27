@@ -54,17 +54,22 @@ export default class Quiz extends React.Component {
     );
   }
 
+  reset() {
+    this.setState({startQuiz: null, qNo: 0, ans: 0, result: null})
+    this.props.reset()
+  }
+
   next(e, b, l) {
-    let {ans, qNo, quizArr} = this.state;
-    e === b && this.setState({ ans: 1 + ans})
-    this.setState({ qNo: 1 + qNo})
-    if(qNo === l) {
-      console.log('result Des : ', ans)
+    let { ans, qNo, quizArr } = this.state;
+    e === b && this.setState({ ans: 1 + ans })
+    this.setState({ qNo: 1 + qNo })
+    if (qNo === l) {
+      this.setState({ result: ans })
     }
   }
 
   render() {
-    const { quizArr, startQuiz, qNo , ans} = this.state;
+    const { quizArr, startQuiz, qNo, ans, result } = this.state;
     return (
       <View
         style={{
@@ -74,27 +79,27 @@ export default class Quiz extends React.Component {
           justifyContent: 'center',
           alignItems: 'stretch',
         }}>
-        
+
         {
           quizArr &&
           quizArr.map((v) => {
             return v.results.map((a, i) => {
               let arr = [...a.incorrect_answers]
-              let random = Math.floor((Math.random() * 2-1) + 1)
+              let random = Math.floor((Math.random() * 2 - 1) + 1)
               arr.splice(random, 0, a.correct_answer);
               return (
-                i === qNo && <View key={i} style={styles.container}>
-                  <Text style={{ 
-                   backgroundColor: 'gray',
-                   padding: 8,
-                   marginBottom: 10, 
-                   width: '40%', 
-                   fontSize: 17,
-                   color: 'white',
-                   fontWeight: 'bold',
-                   borderRadius: 10,
-                   textAlign: 'center'
-                   }}>
+                !result && i === qNo && <View key={i} style={styles.container}>
+                  <Text style={{
+                    backgroundColor: 'gray',
+                    padding: 8,
+                    marginBottom: 10,
+                    width: '40%',
+                    fontSize: 17,
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderRadius: 10,
+                    textAlign: 'center'
+                  }}>
                     Question # {i + 1}
                   </Text>
 
@@ -103,14 +108,14 @@ export default class Quiz extends React.Component {
                   </Text>
                   <Text>
                     {"\n"}
-                   
+
                   </Text>
                   {
                     arr.map((b, n) => {
                       return (
                         <TouchableOpacity
                           key={n}
-                          onPress={this.next.bind(this, a.correct_answer, b, v.results.length-1)}
+                          onPress={this.next.bind(this, a.correct_answer, b, v.results.length - 1)}
                           style={styles.nxtBtn}
                         >
                           <Text style={styles.btnTxt}>
@@ -125,6 +130,38 @@ export default class Quiz extends React.Component {
               );
             });
           })}
+
+        {
+          result && <View>
+            <Text style={styles.result}>
+              Your Score is {result} out of 10
+              {'\n'}
+            </Text>
+            <TouchableOpacity
+              onPress={this.reset.bind(this)}
+              style={{
+              padding: 20, 
+              alignSelf: 'center', 
+              backgroundColor: '#fff',
+              margin: 5,
+              borderRadius: 5,
+              elevation: 15,
+              borderColor: 'black',
+              borderWidth: 1
+             }}
+            >
+              <Text style={{
+              marginStart: 20,
+              marginEnd: 30,
+              fontSize: 20,
+              fontWeight: 'bold',
+              // color: 'white'
+              }}>
+                Retry...
+              </Text>
+            </TouchableOpacity>
+          </View>
+        }
       </View>
     );
   }
@@ -136,7 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'column',
     padding: 15,
-    margin: 10,elevation: 5
+    margin: 10, elevation: 5
   },
   quizQ: {
     backgroundColor: 'gray',
@@ -146,6 +183,20 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     borderRadius: 10,
     fontWeight: 'bold',
+  },
+  result: {
+    alignSelf: 'center',
+    width: 'auto',
+    padding: 20, 
+    alignSelf: 'center', 
+    backgroundColor: '#fff',
+    margin: 5,
+    borderRadius: 5,
+    elevation: 15,
+    borderColor: 'black',
+    borderWidth: 1,
+    fontSize: 24,
+    fontWeight: 'bold'
   },
   options: {
     margin: 5,
