@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, View, ImageBackground } from 'react-native';
 import { Camera, Permissions, FaceDetector } from 'expo';
 import FaceCam from './components/camera.js'
 import Quiz from './components/quiz.js'
+// import { Button } from 'react-native-elements'
 
 export default class App extends React.Component {
   state = {
